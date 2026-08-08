@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Server, CheckCircle2, XCircle, RefreshCw, Settings, ShieldCheck, LogOut, Menu, Search } from 'lucide-react';
+import { Server, CheckCircle2, XCircle, RefreshCw, Settings, ShieldCheck, LogOut, Menu } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import axios from 'axios';
 
@@ -29,7 +29,20 @@ export const Header = ({ onOpenSettings, onToggleSidebar }: HeaderProps) => {
     return 'Admin';
   };
 
-  const checkHealth = async () => {
+  useEffect(() => {
+    const checkHealth = async () => {
+      setServerStatus('checking');
+      try {
+        await axios.get(`${baseUrl}/api/get-in-touch`, { timeout: 3000 });
+        setServerStatus('online');
+      } catch {
+        setServerStatus('online');
+      }
+    };
+    checkHealth();
+  }, [baseUrl]);
+
+  const handleRefresh = async () => {
     setServerStatus('checking');
     try {
       await axios.get(`${baseUrl}/api/get-in-touch`, { timeout: 3000 });
@@ -38,10 +51,6 @@ export const Header = ({ onOpenSettings, onToggleSidebar }: HeaderProps) => {
       setServerStatus('online');
     }
   };
-
-  useEffect(() => {
-    checkHealth();
-  }, [baseUrl]);
 
   return (
     <header className="h-16 bg-[#0B0F17]/95 backdrop-blur-md border-b border-[#1E2B45] fixed top-0 right-0 left-0 lg:left-64 z-30 px-4 sm:px-6 flex items-center justify-between gap-4 select-none">
@@ -87,7 +96,7 @@ export const Header = ({ onOpenSettings, onToggleSidebar }: HeaderProps) => {
             )}
           </div>
           <button
-            onClick={checkHealth}
+            onClick={handleRefresh}
             title="Ping Health"
             className="p-0.5 text-slate-400 hover:text-white transition-colors"
           >
