@@ -17,8 +17,8 @@ export const ServerSettingsModal = ({ isOpen, onClose }: ServerSettingsModalProp
   const [customUrl, setCustomUrl] = useState<string>(baseUrl);
 
   const presetUrls = [
+    { label: 'Production Render Deployment', url: 'https://hindigenousbackend-1.onrender.com', icon: Globe },
     { label: 'Local Development Server', url: 'http://localhost:5000', icon: HardDrive },
-    { label: 'Production Render Deployment', url: 'https://hindigenousbackend.onrender.com', icon: Globe },
   ];
 
   const handleSave = (urlToSet?: string) => {
@@ -90,7 +90,7 @@ export const ServerSettingsModal = ({ isOpen, onClose }: ServerSettingsModalProp
                 type="text"
                 value={customUrl}
                 onChange={(e) => setCustomUrl(e.target.value)}
-                placeholder="http://localhost:5000"
+                placeholder="https://hindigenousbackend-1.onrender.com"
                 className="w-full bg-[#162138] border border-[#23314d] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 transition-colors font-mono"
               />
             </div>

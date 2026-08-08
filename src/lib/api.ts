@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Default API URL: can be changed dynamically in setting or via env
-export const DEFAULT_API_BASE_URL = 'http://localhost:5000';
+// Default API URL: points to Production Render Server or Localhost
+export const DEFAULT_API_BASE_URL = 'https://hindigenousbackend-1.onrender.com';
 
 export const getApiBaseUrl = (): string => {
   if (typeof window !== 'undefined') {
