@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getAuthToken, setAuthToken, clearAuthToken, getApiBaseUrl, setApiBaseUrl } from '@/lib/api';
+import { getAuthToken, setAuthToken, clearAuthToken, getApiBaseUrl, setApiBaseUrl, DEFAULT_API_BASE_URL } from '@/lib/api';
 
 interface AdminUser {
   id?: string;
@@ -26,7 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setTokenState] = useState<string | null>(null);
   const [user, setUserState] = useState<AdminUser | null>(null);
-  const [baseUrl, setBaseUrlState] = useState<string>('http://localhost:5000');
+  const [baseUrl, setBaseUrlState] = useState<string>(DEFAULT_API_BASE_URL);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
