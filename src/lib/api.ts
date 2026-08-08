@@ -1,12 +1,19 @@
 import axios from 'axios';
 
-// Default API URL: points to Production Render Server or Localhost
+// Default API URL: points to Production Render Server (https://hindigenousbackend-1.onrender.com)
 export const DEFAULT_API_BASE_URL = 'https://hindigenousbackend-1.onrender.com';
 
 export const getApiBaseUrl = (): string => {
   if (typeof window !== 'undefined') {
     const saved = localStorage.getItem('hindigenous_api_base');
-    if (saved) return saved;
+    // If stale URL without -1 exists in localStorage, automatically overwrite and fix it
+    if (saved) {
+      if (saved === 'https://hindigenousbackend-1.onrender.com' || saved === 'https://hindigenousbackend-1.onrender.com/') {
+        localStorage.setItem('hindigenous_api_base', DEFAULT_API_BASE_URL);
+        return DEFAULT_API_BASE_URL;
+      }
+      return saved;
+    }
   }
   return process.env.NEXT_PUBLIC_API_URL || DEFAULT_API_BASE_URL;
 };
