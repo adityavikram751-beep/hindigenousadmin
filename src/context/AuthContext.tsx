@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setBaseUrlState(storedBaseUrl);
 
     if (storedToken) {
+      setAuthToken(storedToken);
       setTokenState(storedToken);
       const savedUserStr = localStorage.getItem('hindigenous_user');
       if (savedUserStr) {
@@ -47,6 +48,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } else {
         setUserState({ email: 'admin@hindigenous.com', username: 'Admin' });
       }
+    } else {
+      clearAuthToken();
     }
     setIsLoading(false);
   }, []);
@@ -62,6 +65,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     clearAuthToken();
     setTokenState(null);
     setUserState(null);
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
   };
 
   const updateBaseUrl = (newUrl: string) => {

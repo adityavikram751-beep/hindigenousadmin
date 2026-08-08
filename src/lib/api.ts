@@ -26,7 +26,10 @@ export const setApiBaseUrl = (url: string) => {
 
 export const getAuthToken = (): string | null => {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('hindigenous_token');
+    const localToken = localStorage.getItem('hindigenous_token');
+    if (localToken) return localToken;
+    const match = document.cookie.match(new RegExp('(^| )hindigenous_token=([^;]+)'));
+    if (match) return match[2];
   }
   return null;
 };
@@ -34,6 +37,7 @@ export const getAuthToken = (): string | null => {
 export const setAuthToken = (token: string) => {
   if (typeof window !== 'undefined') {
     localStorage.setItem('hindigenous_token', token);
+    document.cookie = `hindigenous_token=${token}; path=/; max-age=86400; SameSite=Lax`;
   }
 };
 
@@ -41,6 +45,7 @@ export const clearAuthToken = () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('hindigenous_token');
     localStorage.removeItem('hindigenous_user');
+    document.cookie = 'hindigenous_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
   }
 };
 
@@ -57,6 +62,19 @@ api.interceptors.request.use((config) => {
 }, (error) => {
   return Promise.reject(error);
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      clearAuthToken();
+      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api;
 
