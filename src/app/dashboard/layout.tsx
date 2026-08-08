@@ -26,14 +26,17 @@ export default function DashboardLayout({
 
         {/* Main Content Area */}
         <div className="flex-1 lg:pl-64 flex flex-col min-h-screen transition-all">
-          {/* Fixed Top Header */}
+          {/* Fixed Top Header (Height 64px / h-16) */}
           <Header
             onOpenSettings={() => setIsSettingsOpen(true)}
             onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
           />
 
-          {/* Page Body Container with generous top spacing */}
-          <main className="flex-1 pt-24 sm:pt-28 p-4 sm:p-6 md:p-8 max-w-7xl w-full mx-auto space-y-6">
+          {/* Spacer guaranteeing content is pushed DOWN below the fixed header */}
+          <div className="h-20 sm:h-24 w-full shrink-0" />
+
+          {/* Page Body Container */}
+          <main className="flex-1 px-4 sm:px-6 md:px-8 pb-12 max-w-7xl w-full mx-auto space-y-6">
             {children}
           </main>
         </div>
