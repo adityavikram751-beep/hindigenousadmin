@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { categoryArticleApi, CategoryKey } from '@/lib/api';
 import { useToast } from '@/context/ToastContext';
 import { ArticleFormModal } from '@/components/forms/ArticleFormModal';
@@ -23,12 +24,6 @@ import {
   Filter,
 } from 'lucide-react';
 
-interface CategoryPageProps {
-  params: Promise<{
-    categoryName: string;
-  }>;
-}
-
 const CATEGORY_META: Record<string, { title: string; hindi: string; icon: any; color: string }> = {
   history: { title: 'History', hindi: 'इतिहास', icon: History, color: 'text-amber-400' },
   literature: { title: 'Literature', hindi: 'साहित्य', icon: BookOpen, color: 'text-indigo-400' },
@@ -37,10 +32,11 @@ const CATEGORY_META: Record<string, { title: string; hindi: string; icon: any; c
   rajpath: { title: 'Rajpath', hindi: 'राजपथ', icon: Landmark, color: 'text-cyan-400' },
 };
 
-export default function DynamicCategoryPage({ params }: CategoryPageProps) {
-  const resolvedParams = use(params);
-  const rawCatName = resolvedParams.categoryName.toLowerCase();
+export default function DynamicCategoryPage() {
+  const routeParams = useParams();
+  const rawCatName = (typeof routeParams?.categoryName === 'string' ? routeParams.categoryName : 'history').toLowerCase();
   const categoryKey = rawCatName as CategoryKey;
+
   const meta = CATEGORY_META[rawCatName] || {
     title: rawCatName,
     hindi: '',
