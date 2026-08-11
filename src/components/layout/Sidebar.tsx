@@ -19,6 +19,7 @@ import {
   Server,
   X,
   Sparkles,
+  Images,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -36,6 +37,7 @@ export const Sidebar = ({ onOpenSettings, isOpen = false, onClose }: SidebarProp
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Enquiries', href: '/dashboard/enquiries', icon: Inbox },
     { name: 'Featured Videos', href: '/dashboard/videos', icon: Video },
+    { name: 'Gallery (गैलरी)', href: '/dashboard/gallery', icon: Images },
     { name: 'Homepage Articles', href: '/dashboard/homepage-articles', icon: FileText },
   ];
 

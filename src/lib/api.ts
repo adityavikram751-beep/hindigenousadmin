@@ -218,3 +218,28 @@ export const categoryArticleApi = {
     return res.data;
   }
 };
+
+// 6. Gallery APIs
+export const galleryApi = {
+  getAll: async () => {
+    const res = await api.get('/api/gallery');
+    return res.data;
+  },
+  getById: async (id: string) => {
+    const res = await api.get(`/api/gallery/${id}`);
+    return res.data;
+  },
+  create: async (data: { title: string; youtubeUrl: string; description?: string }) => {
+    const res = await api.post('/api/gallery', data);
+    return res.data;
+  },
+  update: async (id: string, data: { title?: string; youtubeUrl?: string; description?: string }) => {
+    const res = await api.put(`/api/gallery/${id}`, data);
+    return res.data;
+  },
+  delete: async (id: string) => {
+    const res = await api.delete(`/api/gallery/${id}`);
+    return res.data;
+  }
+};
+
