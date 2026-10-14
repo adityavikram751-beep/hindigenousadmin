@@ -9,12 +9,10 @@ import {
   Sparkles,
   Lock,
   Mail,
-  User,
   KeyRound,
   ArrowRight,
   Loader2,
   Server,
-  ShieldCheck,
   CheckCircle2,
   Eye,
   EyeOff,
@@ -25,13 +23,12 @@ export default function LoginPage() {
   const { login, baseUrl, updateBaseUrl } = useAuth();
   const { showToast } = useToast();
 
-  const [tab, setTab] = useState<'login' | 'signup' | 'forgot'>('login');
+  const [tab, setTab] = useState<'login' | 'forgot'>('login');
   const [loading, setLoading] = useState(false);
 
   // Form states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   // Forgot password flow states
@@ -74,29 +71,6 @@ export default function LoginPage() {
     }
   };
 
-  // Handle Sign Up
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!username || !email || !password) {
-      showToast('Error', 'Please fill in all fields', 'error');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await authApi.register({ username, email, password });
-      showToast('Registration Successful', res.message || 'Admin account created. Please sign in.', 'success');
-      setTab('login');
-    } catch (err: any) {
-      showToast(
-        'Sign Up Failed',
-        err.response?.data?.message || err.message || 'Could not register admin',
-        'error'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Handle Forgot Password Flow
   const handleSendOtp = async (e: React.FormEvent) => {
@@ -207,33 +181,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Navigation Tabs */}
-          {tab !== 'forgot' && (
-            <div className="flex bg-[#090D16] p-1 rounded-xl mb-6 border border-[#1E293B]">
-              <button
-                type="button"
-                onClick={() => setTab('login')}
-                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-                  tab === 'login'
-                    ? 'bg-amber-500 text-slate-950 shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Admin Login
-              </button>
-              <button
-                type="button"
-                onClick={() => setTab('signup')}
-                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-                  tab === 'signup'
-                    ? 'bg-indigo-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Register Admin
-              </button>
-            </div>
-          )}
 
           {/* LOGIN FORM */}
           {tab === 'login' && (
@@ -309,84 +256,6 @@ export default function LoginPage() {
             </form>
           )}
 
-          {/* SIGN UP FORM */}
-          {tab === 'signup' && (
-            <form onSubmit={handleSignUp} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                  Username
-                </label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                  <input
-                    type="text"
-                    required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="admin_user"
-                    className="w-full bg-[#1E293B]/50 border border-[#1E293B] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-400 transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@example.com"
-                    className="w-full bg-[#1E293B]/50 border border-[#1E293B] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-400 transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password123"
-                    className="w-full bg-[#1E293B]/50 border border-[#1E293B] rounded-xl pl-10 pr-10 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-400 transition-colors"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-3 text-slate-400 hover:text-white transition-colors"
-                    title={showPassword ? 'Hide Password' : 'Show Password'}
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition-all shadow-md flex items-center justify-center space-x-2 disabled:opacity-50 mt-2"
-              >
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <>
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>Create Admin Account</span>
-                  </>
-                )}
-              </button>
-            </form>
-          )}
 
           {/* FORGOT PASSWORD STEP FLOW */}
           {tab === 'forgot' && (
